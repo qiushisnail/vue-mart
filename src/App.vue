@@ -1,16 +1,33 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Home</router-link>|
+      <router-link to="/about">About</router-link>|
+      <router-link to="/login" v-if="!isLogin">Login</router-link>
+      <a @click="logout" v-if="isLogin">Logout</a>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
+<script>
+import {mapGetters} from 'vuex'
+export default {
+  methods: {
+    logout(){
+      this.$http.get('/api/logout')
+    }
+  },
+  computed: {
+    ...mapGetters(['isLogin'])
+  }
+  
+}
+</script>
+
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
