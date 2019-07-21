@@ -60,11 +60,11 @@ export default {
   methods: {
     async handleLogin(e) {
       e.preventDefault(); // 避免表单的默认行为
-      const res = await this.$http.get("/api/login", {
-        params: {
+      const res = await this.$http.post("/api/login", { // request.body
+         
           username: this.model.username,
           password: this.model.password
-        }
+        
       });
       const { code, token, message } = res.data;
       if (code == 0) {

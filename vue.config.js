@@ -25,6 +25,8 @@ module.exports = {
             }else{
               res.sendStatus(401) // 错误状态提醒用户登录
             }
+          }else{
+            next()
           }
         })
         app.get('/api/goods', function (req, res) {
@@ -37,19 +39,31 @@ module.exports = {
           })
 
         })
-        app.get('/api/login', function (req, res) {
-          const { username, password } = req.query
-          if (username === 'jerry' && password === '123') {
-            res.json({
-              code: 0,
-              token: 'jilei'
-            })
-          } else {
-            res.json({
-              code: 1,
-              message: '用户名或者密码错误'
-            })
-          }
+        app.post('/api/login', function (req, res) {
+
+          let body = []
+
+          req.on("data", chunk => { // 请求体传参是流体的，一片一片的
+            // 接受到一部分数据
+            body.push(chunk) // chunk是Buffer对象
+          }).on("end",()=>{
+            // 数据接收完毕
+            body= Buffer.concat(body).toString()
+            // 转换并保存前台传递的user
+            const { username, password } = JSON.parse(body) // {name:'',pwd:''`}
+            if (username === 'jerry' && password === '123') {
+              res.json({
+                code: 0,
+                token: 'jilei'
+              })
+            } else {
+              res.json({
+                code: 1,
+                message: '用户名或者密码错误'
+              })
+            }
+          })
+         
 
         })
 
