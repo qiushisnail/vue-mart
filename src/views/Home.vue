@@ -22,6 +22,8 @@
 
 <script>
 import GoodsList from "@/components/GoodsList.vue";
+import create from "@/services/create.js";
+import BallAnim from "@/components/BallAnim.vue";
 const labels = {
   fe: "前端",
   python: "Python",
@@ -74,13 +76,20 @@ export default {
       // this.ball.el = el;
       // this.ball.show = true;
       // 创建一个小球动画实例
-      const anim = this.$createBallAnim({
-        el,
-        onTransitionend() {
-          anim.remove(); // 动画结束，移除小球组件实例
-        }
-      });
+      // const anim = this.$createBallAnim({
+      //   el,
+      //   onTransitionend() {
+      //     anim.remove(); // 动画结束，移除小球组件实例
+      //   }
+      // });
+      // anim.start();
+      // 手动创建组件实例
+
+      const anim = create(BallAnim, { el });
       anim.start();
+      anim.$on("transitionend", () => {
+        anim.remove();
+      });
     }
   },
   computed: {
