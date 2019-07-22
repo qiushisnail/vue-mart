@@ -67,8 +67,15 @@ export default {
       this.$refs.drawer.show();
 
       // 创建Notice实例
-      const notice = this.$createNotice();
-      notice.add({ content: "lalala", duration: 2 });
+      // // cube-ui方式
+      // const notice = this.$createNotice();
+      // notice.add({ content: "lalala", duration: 2 });
+
+      // 自定义方式
+      this.$notice.info({
+        duration: 3,
+        content: "一些消息内容"
+      });
     },
     selectHandler(val) {
       this.selectedKeys = [...val];
