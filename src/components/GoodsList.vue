@@ -27,7 +27,7 @@ export default {
       this.$store.commit("addCart", item);
 
       // 把点击事件派发出去
-      this.$emit.commit("addCart", $event.target);
+      this.$emit("addCart", $event.target);
     },
     imgPreview(img) {
       // 调用cube-ui全局api动态天机图片预览组件
