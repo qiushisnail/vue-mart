@@ -65,6 +65,10 @@ export default {
     showCatg() {
       // 显示分类列表
       this.$refs.drawer.show();
+
+      // 创建Notice实例
+      const notice = this.$createNotice();
+      notice.add({ content: "lalala", duration: 2 });
     },
     selectHandler(val) {
       this.selectedKeys = [...val];
