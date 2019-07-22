@@ -3,10 +3,16 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from '@/views/Login.vue'
 import Cart from '@/views/Cart.vue'
+import History from '@/utils/history.js'
 import store from './store';
 Vue.use(Router)
+Vue.use(History)
 
-
+// 实例化之前，扩展router
+Router.prototype.goBack = function () {
+  this.isBack = true; 
+  this.back()
+}
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -30,10 +36,7 @@ const router = new Router({
       path: '/about',
       name: 'about',
       meta: { auth: true }, //路由受保护
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import('./views/About.vue')
     }
   ]
 })
@@ -52,7 +55,19 @@ router.beforeEach((to, from, next) => {
       })
     }
   } else {
-      next()
+    next()
   }
+})
+
+// afterEach 记录历史记录
+router.afterEach((to, from) => {
+  if (router.isBack) {
+    // 后退
+    History.pop();
+    router.isBack = false;
+  } else {
+    History.push(to.path);
+  }
+
 })
 export default router;
