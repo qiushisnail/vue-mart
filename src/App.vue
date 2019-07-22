@@ -6,13 +6,12 @@
       <router-link to="/login" v-if="!isLogin">Login</router-link>
       <a @click="logout" v-if="isLogin">Logout</a>
     </div>-->
-    <transition name="route-move">
+    <transition :name="transitionName">
       <router-view class="child-view" />
     </transition>
 
     <cube-tab-bar show-slider v-model="selectLabel" @change="changeHandle">
-      <cube-tab v-for="(item, index) in tabs" 
-      :key="index" :icon="item.icon" :label="item.value">
+      <cube-tab v-for="(item, index) in tabs" :key="index" :icon="item.icon" :label="item.value">
         <span>{{item.label}}</span>
         <span class="badge" v-if="showBagde(item.label)">{{cartTotal}}</span>
       </cube-tab>
@@ -30,13 +29,15 @@ export default {
         { label: "Home", value: "/", icon: "cube-home" },
         { label: "Cart", value: "/cart", icon: "cube-mail" },
         { label: "Me", value: "/login", icon: "cubic-person" }
-      ]
+      ],
+      transitionName: "route-forward"
     };
   },
   watch: {
     //路由发生变化是，同步tabs选中（用户返回）监控路由变换
     $route(route) {
       this.selectLabel = route.path;
+      this.transitionName = this.$router.transitionName;
     }
   },
   created() {
@@ -92,16 +93,26 @@ export default {
   top: 0;
 }
 /*页面滑动动画*/
-.route-move-enter {
+.route-forward-enter {
   /*入场前*/
   transform: translate3d(-100%, 0, 0);
 }
-.route-move-leave-to {
+.route-back-enter {
+  /*入场前*/
+  transform: translate3d(100%, 0, 0);
+}
+.route-forward-leave-to {
   /*出场后*/
   transform: translate3d(100%, 0, 0);
 }
-.route-move-enter-active,
-.route-move-leave-active {
+.route-back-leave-to {
+  /*出场后*/
+  transform: translate3d(-100%, 0, 0);
+}
+.route-forward-enter-active,
+.route-forward-leave-active,
+.route-back-enter-active,
+.route-back-leave-active {
   /*出场后*/
   transition: transform 0.3s;
 }
