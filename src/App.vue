@@ -10,7 +10,13 @@
       <router-view class="child-view" />
     </transition>
 
-    <cube-tab-bar show-slider v-model="selectLabel" :data="tabs" @change="changeHandle"></cube-tab-bar>
+    <cube-tab-bar show-slider v-model="selectLabel" @change="changeHandle">
+      <cube-tab v-for="(item, index) in tabs" 
+      :key="index" :icon="item.icon" :label="item.value">
+        <span>{{item.label}}</span>
+        <span class="badge" v-if="showBagde(item.label)">{{cartTotal}}</span>
+      </cube-tab>
+    </cube-tab-bar>
   </div>
 </template>
 
@@ -43,10 +49,13 @@ export default {
     },
     changeHandle(val) {
       this.$router.push(val);
+    },
+    showBagde(label) {
+      return label == "Cart" && this.cartTotal > 0;
     }
   },
   computed: {
-    ...mapGetters(["isLogin"])
+    ...mapGetters(["isLogin", "cartTotal"])
   }
 };
 </script>
@@ -102,5 +111,13 @@ export default {
   top: 0;
   width: 100%;
   padding-bottom: 36px;
+}
+span.badge {
+  display: inline-block;
+  background: #de3529;
+  color: white;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
 }
 </style>
